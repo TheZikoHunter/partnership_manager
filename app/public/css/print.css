@@ -1,0 +1,43 @@
+@page {  
+    size: landscape;
+}
+header, header *, footer, footer *, main :not(#print, #print *){
+    display: none;
+}
+table.print{
+    width: 100%;
+    page-break-inside: auto;
+    border-collapse: collapse;
+}
+table.print th, table.print tbody td, table.print thead tr:nth-child(2) th{
+    border: 2px solid black;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+table.print td{
+    max-width: 350px;
+}
+table.print img{
+    width: 100%;
+}
+
+table.print thead{
+    text-align: center;
+    display: table-header-group;
+}
+table.print thead h4{
+    text-decoration: underline;
+}
+thead{
+    display: table-header-group;
+}
+tfoot{
+    display: table-footer-group;
+}
+
+
+table.print tr{
+    page-break-inside: avoid;
+    page-break-after: auto;
+}

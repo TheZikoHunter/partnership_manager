@@ -1,0 +1,56 @@
+<?php
+require_once ABSOLUTE_PATH . '/config/Database.php';
+class User{
+    public function insertUser(string $email, string $username, string $password){
+        $db = Database::getInstance() -> getConnexion();
+        /**
+         * Verify if the admin email is used with the correct password
+         */
+        $admin = $db -> query("SELECT username FROM User WHERE username = '$username'") -> fetch(PDO::FETCH_ASSOC);
+        if(!($admin)){
+            $query = $db -> prepare("INSERT INTO User (email, username, password, admin) VALUES ('$email', '$username', '".password_hash($password, PASSWORD_DEFAULT)."', '0')");
+            $query -> execute();
+            $_SESSION['loged'] = 'good';
+        }
+    }
+    public function insertAdmin(string $email, string $username, string $password){
+        $db = Database::getInstance() -> getConnexion();
+        /**
+         * Verify if the admin email is used with the correct password
+         */
+        $admin = $db -> query("SELECT username FROM User WHERE username = '$username'") -> fetch(PDO::FETCH_ASSOC);
+        if(!($admin)){
+            $query = $db -> prepare("INSERT INTO User (email, username, password, admin) VALUES ('$email', '$username', '".password_hash($password, PASSWORD_DEFAULT)."', '1')");
+            $query -> execute();
+            $_SESSION['loged'] = 'good';
+            header('Location:/');
+        }else{
+            exit;
+        }
+    }
+    public function listUsers(){
+        $db = Database::getInstance() -> getConnexion();
+        $users = $db -> query("SELECT * FROM User") -> fetchAll(PDO::FETCH_ASSOC);
+        return $users;
+    }
+    public function logUser(string $username, string $password){
+        $db = Database::getInstance() -> getConnexion();
+
+        $admin = $db -> query("SELECT username, password FROM User WHERE admin='1'") -> fetch(PDO::FETCH_ASSOC);
+
+        if($username == $admin['username'] && password_verify($password, $admin['password'])){
+            $_SESSION['loged'] = 'admin';
+            header('Location:/');
+        }
+
+        $users = $db -> query("SELECT username, password FROM User WHERE admin='0'") -> fetchAll(PDO::FETCH_ASSOC);
+        foreach($users as $user){
+            if($user['username'] === $username){
+                if(password_verify($password, $user['password'])){
+                    $_SESSION['loged'] = 'user';
+                    header('Location:/');
+                }
+            }
+        }
+    }
+}

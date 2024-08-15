@@ -1,0 +1,189 @@
+body#register{
+    width: 100%;
+    display: block;
+    background-color: rgb(255, 255, 255);
+}
+body#register img{
+    margin-top: 20px;
+    height: 100px;
+    position: relative;
+    right: 50%;
+    transform: translate(50%, 0);
+}
+#login, #login *{
+    z-index: 10;
+}
+form#login.hidden, form#login.hidden *{
+    display: none;
+}
+#login{
+    box-shadow: 0 0 20px black;
+    height: 400px;
+    width: 600px;
+    border-radius: 2rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+}
+#login-area{
+    box-shadow: 0 0 20px blueviolet;
+    border-radius: 2rem;
+    border: 2px solid black;
+    height: 60%;
+    width: 70%;
+    position: inherit;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(221, 220, 220);
+    padding: 20px;
+}
+#login-area td{
+    /*border: 2px solid black;*/
+}
+#login-area tr:first-child td{
+    font-weight: 700;
+    font-size: 30px;
+}
+#login-area td{
+    text-align: center;
+}
+#login-area input{
+    width: 95%;
+    height: 30px;
+}
+#login button{
+    box-shadow: 0 10px 20px black;
+    position: inherit;
+    bottom: -12%;
+    left: 6%;
+    height: 50px;
+    width: 200px;
+    background-color: white;
+    border: none;
+    font-size: 20px;
+    font-weight: 700;
+}
+#login button:last-child{
+    box-shadow: 0 10px 20px black;
+    position: inherit;
+    bottom: -12%;
+    right: 6%;
+    height: 50px;
+    width: 200px;
+    background-color: white;
+    border: none;
+    font-size: 20px;
+    font-weight: 700;
+}
+#login button:hover{
+    
+    background-color: rgb(125, 30, 180);
+    color: white;
+    transform: scale(1.1);
+}
+
+/*=================================---> Case for signin <---====================*/
+#signin, #signin *{
+    z-index: 1;
+}
+#signin{
+    box-shadow: 0 0 20px black;
+    height: 400px;
+    width: 600px;
+    border-radius: 2rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+}
+#signin-area{
+    box-shadow: 0 0 20px blueviolet;
+    border-radius: 2rem;
+    border: 2px solid black;
+    height: 60%;
+    width: 70%;
+    position: inherit;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(221, 220, 220);
+    padding: 20px;
+}
+#signin-area td{
+    /*border: 2px solid black;*/
+}
+#signin-area tr:first-child td{
+    font-weight: 700;
+    font-size: 30px;
+}
+#signin-area td{
+    text-align: center;
+}
+#signin-area input{
+    width: 95%;
+    height: 30px;
+}
+#signin-area tr:last-child td:last-child{
+    display: flex;
+    justify-content: right;
+}
+#signin-area input#password-reveal{
+    width: 20px;
+}
+#signin button{
+    box-shadow: 0 10px 20px black;
+    position: inherit;
+    bottom: -12%;
+    left: 6%;
+    height: 50px;
+    width: 200px;
+    background-color: white;
+    border: none;
+    font-size: 20px;
+    font-weight: 700;
+}
+#signin button:last-child{
+    box-shadow: 0 10px 20px black;
+    position: inherit;
+    bottom: -12%;
+    right: 6%;
+    height: 50px;
+    width: 200px;
+    background-color: white;
+    border: none;
+    font-size: 20px;
+    font-weight: 700;
+}
+#signin button:hover{
+    
+    background-color: rgb(125, 30, 180);
+    color: white;
+    transform: scale(1.1);
+}
+
+
+#back-home{
+    transform: translate(-50px, -30px);
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    color: black;
+    background-color: blueviolet;
+    height: 70px;
+    width: 200px;
+    padding: 20px;
+    box-sizing: border-box;
+    border: 1px solid black;
+    border-radius: 3rem;
+    box-shadow: 2px 3px 5px black;
+    float: left;
+}
+#back-home:hover{
+    color: white;
+    background-color: rgb(45, 3, 85);
+}

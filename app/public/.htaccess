@@ -1,0 +1,12 @@
+RewriteEngine On
+
+# Exclude specific directories and files from rewriting
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/(admin|css|fonts|ico|include|js)/
+
+# Rewrite all other requests to index.php
+RewriteRule ^(.*)$ index.php [PT]
+
+# Error management
+ErrorDocument 404 /errors/404.html

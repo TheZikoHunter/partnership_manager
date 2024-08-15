@@ -1,0 +1,159 @@
+<?php
+$title = 'ارشيف الشراكات';
+$page_title = 'ارشيف الشراكات';
+require_once ABSOLUTE_PATH . '/views/layouts/header.php';
+if(!isset($_GET['page'])){
+    $_GET['page'] = 1;
+}
+        require_once ABSOLUTE_PATH . '/models/Partnership.php';
+        require_once ABSOLUTE_PATH . '/models/Form.php';
+        require_once ABSOLUTE_PATH . '/models/Association.php';
+        require_once ABSOLUTE_PATH . '/models/Institution.php';
+        require_once ABSOLUTE_PATH . '/models/Scale.php';
+        require_once ABSOLUTE_PATH . '/models/Table.php';
+        $TABLE = new Table();
+        $FORM = new Form();
+        $show = new Partnership();
+        $_part = new Institution();
+        $_scale = new Scale();
+        $_association = new Association();
+
+        $heads = $show -> heads;
+        $open = array();
+        $_open = array();
+
+        $page = $_GET['page'];
+        ?>
+        <!--
+<div class="alert alert-danger">
+            <div class="message-box">
+                <h2 class="message">
+                    <strong>تم حذف الشراكة</strong>
+                </h2>
+            </div>
+        </div>
+
+         -->
+        
+
+        <div class="control">
+
+            <div>
+                <form action="" method="get">
+                    <input type="text" name="search">
+                    <button type="submit">بحث</button>
+                </form>
+            </div>
+        </div>
+<?php
+        if(isset($_POST['restore']))
+        {
+            require_once(ABSOLUTE_PATH . '/models/Action.php');
+            $action = new Action();
+            $now = new DateTimeImmutable('now', new DateTimeZone('WEST'));
+            $show -> restore($_POST['restore']);
+            
+        }
+        if(isset($_POST['delete']))
+        {
+            $show -> delete($_POST['delete']);
+            unset($_POST['delete']);
+        }
+        
+
+        $rank_offset = 1 + ($page - 1 ) * 10;
+        $lines = $show -> selectArchived();
+
+        if(isset($_GET['search']))
+        {
+            $lines = $lines -> nameLike(htmlentities($_GET['search']));
+            $_SESSION['search'] = htmlentities($_GET['search']);
+        }
+        
+        $stmt = $lines -> executeSelect(strval($rank_offset - 1));
+        $lines = $stmt -> fetchAll(PDO::FETCH_ASSOC);
+        $stmt -> closeCursor();?>
+        <?php if(empty($lines)): ?>
+            <div class="none-page">
+                <h1>لا شراكات في الارشيف حالياََ</h1>
+            </div>
+            
+            
+        <?php else: ?>
+        <table class="show"><tr class="show"><th class="show"><strong>ر.ت</strong></th>
+
+        <?php foreach($heads as $head): ?>
+	    <th class="show"><strong>
+<?php
+	if($head==='التكلفة'){
+		 $uri_search = (isset($_SESSION['search'])) ? ('&search=' . $_SESSION['search']) : '';
+                    echo '<a href="?order=DESC'. $uri_search . '"><img id="first-arrow" src="img/arrow.png"></a>';
+                    echo '<a href="?order=ASC'. $uri_search . '"><img id="second-arrow" src="img/arrow.png"></a>';
+
+	}
+	$head
+?>
+
+</strong></th>
+        <?php endforeach; ?>
+
+        <th class="show archive"><strong>عمليات</strong></th></tr>
+
+        <?php foreach($lines as $entity): ?>
+            <tr class="show">
+                <td class="show"><?=$rank_offset++ ?></td>
+                <?php
+                foreach($entity as $name => $value): 
+                    if(!(str_contains($name, '_ID'))): ?>
+                        <td class="show"><?php $TABLE -> showLine($name, $value) ?></td>
+                    <?php endif; ?>
+                <?php endforeach; 
+        ?>
+
+            <td class="show archive">
+
+
+                    <form action="" method="POST" class="archive">
+                    <button type="submit" name="restore" value="<?=$entity['_ID']?>">اعادة</button>
+                    </form>
+
+                    <form action="" method="POST" class="archive">
+                    <button type="submit" name="delete" value="<?=$entity['_ID']?>">حذف</button>
+                    </form>
+            </td></tr>
+        <?php endforeach; ?>
+        </table>
+
+        
+        <div class="pagination">
+            <ul class="pagination">
+                <?php
+
+                
+
+                $total = $show -> countArchived();
+                if($total - 10 * ($page - 1) - count($lines) > 0 && count($lines) > 10): 
+                
+                ?>
+                    <li><form method="GET"><button type="submit" name="page" value="<?=$page + 1?>" class="next">التالي</button></form></li>
+                    <li><p><?=$page?></p></li>
+                <?php endif; ?>
+
+                
+
+                <?php if($page > 1): ?>
+                    <li><form method="GET"><button type="submit" name="page" value="<?=$page - 1?>" class="previous">السابق</button></form></li>
+                <?php endif; ?>
+            </ul>
+        </div>
+        <?php endif; 
+        /*
+        echo '<pre>';
+        echo '<h2>$total</h2>';
+        var_dump($total);
+        echo '<h2>$page</h2>';
+        var_dump($page);
+        echo '<h2>count($lines)</h2>';
+        var_dump(count($lines));
+        echo '</pre>';*/
+        ?>

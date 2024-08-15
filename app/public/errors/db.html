@@ -1,0 +1,54 @@
+<html lang="ar" dir="rtl">
+    <head>
+	<meta charset="UTF-8">
+        <base href="/">
+        <title>Database Echec</title>
+        <style> 
+            body.error{
+                height: 100vh;
+                width: 100%;
+                background: radial-gradient(circle, rgba(0,139,249,0.7512138644520308) 58%, rgba(0,144,170,0.5999533602503502) 80%, rgba(0,66,145,1) 100%);
+            }
+            div.error{
+                position: absolute;
+                top: 50%;
+                right: 50%;
+                transform: translate(50%, -50%);
+                border: 1px solid white;
+                border-radius: 1rem;
+                padding: 90px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }         
+            div.error-msg{
+                font-size: 60px;
+                color: white;
+                font-weight: 800;
+            }
+            div.error-type{
+                font-size: 70px;
+                text-align: center;
+                color: white;
+            }
+            div.sep{
+
+                width: 100%;
+                height: 0;
+                border-top: 1px solid white;
+            }
+
+        </style>
+    </head>
+    <body class="error">
+        <div class="error">
+            <div class="error-msg">
+              قاعدة البيانات غير متوفرة
+            </div>
+            <div class="sep"></div>
+            <div class="error-type">
+                تحقق من تفعيل قاعدة البيانات أو من القاعدة عبر <br><p style="color:black;">/phpmyadmin</p>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,287 @@
+<?php
+
+$title = 'لائحة الشراكات';
+$page_title = 'لائحة الشراكات';
+require_once ABSOLUTE_PATH . '/views/layouts/header.php';
+if(!isset($_GET['page'])){
+    $_GET['page'] = 1;
+}
+        require_once ABSOLUTE_PATH . '/models/Partnership.php';
+        require_once ABSOLUTE_PATH . '/models/User.php';
+        require_once ABSOLUTE_PATH . '/models/Form.php';
+        require_once ABSOLUTE_PATH . '/models/Association.php';
+        require_once ABSOLUTE_PATH . '/models/Institution.php';
+        require_once ABSOLUTE_PATH . '/models/Scale.php';
+        require_once ABSOLUTE_PATH . '/models/Table.php';
+
+        $_USER = new User();
+        $TABLE = new Table();
+        $FORM = new Form();
+        $show = new Partnership();
+        $_institution = new Institution();
+        $_scale = new Scale();
+        $_association = new Association();
+        $_institutions = $_institution -> forSelect() -> executeSelect() -> fetchAll(PDO::FETCH_ASSOC);
+        $_associations = $_association -> forSelect() -> executeSelect() -> fetchAll(PDO::FETCH_ASSOC);
+        $_scales = $_scale -> forSelect() -> executeSelect() -> fetchAll(PDO::FETCH_ASSOC);
+        $heads = $show -> heads;
+        $open = array();
+        $_open = array();
+
+        $page = $_GET['page'];
+        $formTitle = 'اضافة شراكة جديدة';
+        $formInfo = array(
+            'اسم المؤسسة' => array('id' => 'institution', 'name' => '_OPEN_NOEDIT_FORinstitution_name', 'value' => array($_institutions, 'اختر المؤسسة')), 
+            'اسم الجمعية' => array('id' => 'association', 'name' => '_OPEN_NOEDIT_FORassociation_name', 'value' => array($_associations, 'اختر الجمعية')), 
+            'الموضوع' => array('id' => 'subject', 'name' => '_OPEN_TEXTsubject', 'placeholder' => 'ادخل موضوع الاتفاقية'), 
+            'المجال الجغرافي' => array('id' => 'scale', 'name' => '_OPEN_NOEDIT_FORscale', 'value' => array($_scales, 'اختر المجال الجغرافي')), 
+            'تاريخ التوقيع' => array('id' => 'date', 'name' => '_OPEN_DATEsigning'),
+            'مدة الشراكة بالسنوات' => array('id' => 'period', 'name' => '_OPEN_NUMperiod', 'placeholder' => 'ادخل عدد سنوات الاتفاقية'), 
+            'قابلة للتجديد؟' => array('name' => '_OPEN_BOOLrenewable', 'choices' => array(
+                'نعم' => array('id' => 'yes', 'value' => '1'),
+                'لا' => array('id' => 'no', 'value' => '0')
+            )),
+            'التكلفة (بالدرهم)' => array('id' => 'cost', 'name' => '_OPEN_CURRENCYcost', 'placeholder' => 'ادخل تكلفة الشراكة')
+        );
+
+        $FORM -> insertForm($formInfo, $formTitle);
+
+        ?>
+        <!--
+<div class="alert alert-danger">
+            <div class="message-box">
+                <h2 class="message">
+                    <strong>تم حذف الشراكة</strong>
+                </h2>
+            </div>
+        </div>
+
+         -->
+        
+
+        
+
+        <div class="control">
+
+            <div>
+                <form action="" method="get">
+                    <input type="text" name="search">
+                    <button type="submit">بحث</button>
+                </form>
+            </div>
+
+            <button data-modal-target="#add" class="add" <?= ($_SESSION['loged'] !== 'admin') ? 'disabled' : '' ?>>اضافة شراكة</button>
+            <button onclick="window.print()" class="print">طباعة</button>
+        </div>
+<?php
+        if(isset($_POST['add'])){foreach($_POST as $name => $value){
+            if(str_contains($name, '_OPEN') && !str_contains($name, '_NOINSERT')){$_insert[$name] = $value;}}
+            $show -> insert($_insert);}
+
+        if(isset($_POST['archive'])){$show -> archive($_POST['archive']);}
+        if(isset($_POST['delete'])){$show -> delete($_POST['delete']);}
+        if(isset($_POST['edit'])){foreach($_POST as $name => $value){
+            if(str_starts_with($name, '_OPEN') && !str_contains($name, '_NOEDIT')){$_update[$name] = $value;}
+            if(str_contains($name, 'edit')){$id = $value;}
+        }
+            $show -> update($id, $_update);
+        }
+        
+        $print_table = $show -> select() -> executePrint() -> fetchAll(PDO::FETCH_ASSOC);
+
+        ?>
+        <div class="modal" id="print">
+        <table class="print">
+            <thead>
+                <tr>
+                    <td colspan="7">
+                    <img src="public/img/logo_men.jpg">
+                    <?php
+                    $now = new DateTimeImmutable('now', new DateTimeZone('WEST'));
+                    $scolarity = array($now -> format('Y'), $now -> format('m'));
+                    $scolarity_year = ($scolarity[1] > 7) ? ($scolarity[0] + 1 . '/' . $scolarity[1]) : ($scolarity[0] . '/' . $scolarity[0] - 1);
+                    ?>
+                        <h4>
+                            حصيلة اتفاقيات الشراكة المبرمة على مستوى المديرية الاقليمية لكلميم والمؤسسات التابعة لها برسم الموسم الدراسي <?=$scolarity_year ?>
+                        </h4>
+                    </td>
+                </tr>
+            <tr>
+                <th>
+                    ر.ت
+                </th>
+                <th>
+                    اسم الجمعية الشريكة
+                </th>
+                <th>
+                    موضوع اتفاقية  الشراكة
+                </th>
+                <th>
+                    المجال الجغرافي
+                </th>
+                <th>
+                    المؤسسة
+                </th>
+                <th>
+                    سنوات الانجاز
+                </th>
+                <th>
+                    تاريخ التوقيع
+                </th>
+                <th>
+                    التكلفة
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php 
+            $num = 1;
+            foreach($print_table as $line): ?>
+                <tr>
+                <td><?php echo $num; $num++; ?></td>
+                <td><?=$line['_OPEN_NOEDIT_FORassociation_name']?></td>
+                <td><?=$line['_OPEN_TEXTsubject']?></td>
+                <td><?=$line['_OPEN_NOEDIT_FORscale']?></td>
+                <td><?=$line['_OPEN_NOEDIT_FORinstitution_name']?></td>
+                <td><?=$line['_OPEN_NUMperiod']?></td>
+                <td><?=$line['_OPEN_DATEsigning']?></td>
+                <td><?=($line['_OPEN_CURRENCYcost']) ? $line['_OPEN_CURRENCYcost'] . 'د.م' : 'بدون' ?></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+            <tfoot>
+                    <tr>
+                        <td colspan="7">
+                            <p>
+                            مصلحة الشؤون القانونية والتواصل والشراكة-مكتب الشراكات والتعاقد
+                            </p>
+                            <p>
+                            شارع حمان الفطواكي__كلميم 81000_052872396:
+                            </p>
+                        </td>
+                    </tr>
+            </tfoot>        
+            </table>
+        </div>
+        <?php
+        $rank_offset = 1 + ($page - 1 ) * 10;
+        $lines = $show -> select();
+
+        if(isset($_GET['search']))
+        {
+            $lines = $lines -> nameLike(htmlentities($_GET['search']));
+            $_SESSION['search'] = htmlentities($_GET['search']);
+        }
+        if(isset($_GET['order'])){
+            $lines = $lines -> orderByCost($_GET['order']);
+        }
+        $stmt = $lines -> executeSelect(strval($rank_offset - 1));
+        $lines = $stmt -> fetchAll(PDO::FETCH_ASSOC);
+        $stmt -> closeCursor();?>
+        <?php if(empty($lines)): ?>
+            <?php if(isset($_GET['search'])): ?>
+                <div class="none-page">
+                    <h1>لا شراكات متعلقة ب "<?=$_GET['search'] ?>"</h1>
+            </div>
+            <?php else: ?>
+            <div class="none-page">
+                <h1>لا شراكات حالياََ</h1>
+                <div class="space"></div>
+                <h1>يمكنكم اضافة واحدة بالضغط على زر "إضافة"</h1>
+				
+            </div>
+            <?php endif; ?>
+        <?php else: ?>
+        <table class="show"><tr class="show"><th class="show"><strong>ر.ت</strong></th>
+
+        <?php foreach($heads as $head): ?>
+            <th class="show"><strong>
+                <?php
+                if($head === 'التكلفة'){
+                    $uri_search = (isset($_SESSION['search'])) ? ('&search=' . $_SESSION['search']) : '';
+                    echo '<a href="?order=DESC'. $uri_search . '"><img id="first-arrow" src="public/img/arrow.png"></a>';
+                    echo '<a href="?order=ASC'. $uri_search . '"><img id="second-arrow" src="public/img/arrow.png"></a>';
+                }
+                 echo $head;
+                 ?>
+            </strong></th>
+        <?php endforeach; ?>
+
+        <th class="show operation"><strong>عمليات</strong></th></tr>
+
+        <?php foreach($lines as $entity): ?>
+            <tr class="show">
+                <td class="show"><?=$rank_offset++ ?></td>
+                <?php
+                foreach($entity as $name => $value): 
+                    if(!(str_contains($name, '_ID'))): ?>
+                        <td class="show"><?php $TABLE -> showLine($name, $value) ?></td>
+                    <?php endif; ?>
+                <?php endforeach; 
+        ?>
+
+            <td class="show operation">
+                    <form action="partnerships/journal" method="POST" class="operation">
+                        <button type="submit" name="journal" value="<?=$entity['_ID'] ?>">مزيد</button>
+                    </form>
+                    <form action="" class="operation">
+                    <button data-modal-target="#<?='P' . $rank_offset ?>" class="add" <?= ($_SESSION['loged'] !== 'admin') ? 'disabled' : '' ?>>تعديل</button>
+                    </form>
+                    
+
+                    <?php 
+                    
+                    $updateFormMeta = array('تعديل شراكة', $entity['_ID']);
+                    $updateFormInfo = array(
+                        'اسم العضو' => array('id' => 'part', 'name' => '_OPEN_NOEDIT_FORinstitution_name', 'value' => $entity['_OPEN_NOEDIT_FORinstitution_name']), 
+                        'اسم الجمعية' => array('id' => 'association', 'name' => '_OPEN_NOEDIT_FORassociation_name', 'value' => $entity['_OPEN_NOEDIT_FORassociation_name']), 
+                        'الموضوع' => array('id' => 'subject', 'name' => '_OPEN_TEXTsubject', 'value' => $entity['_OPEN_TEXTsubject']), 
+                        'المجال الجغرافي' => array('id' => 'scale', 'name' => '_OPEN_NOEDIT_FORscale', 'value' => $entity['_OPEN_NOEDIT_FORscale']), 
+                        'مدة الشراكة بالسنوات' => array('id' => 'period', 'name' => '_OPEN_NUMperiod', 'value' => $entity['_OPEN_NUMperiod']), 
+                        'تاريخ التوقيع' => array('id' => 'date', 'name' => '_OPEN_DATEsigning', 'value' => date('Y-m-d', strtotime($entity['_OPEN_DATEsigning']))),
+                        'قابلة للتجديد؟' => array('name' => '_OPEN_BOOLrenewable', 'value' => $entity['_OPEN_BOOLrenewable'], 'choices' => array(
+                            'نعم' => array('id' => 'yes', 'value' => '1'),
+                            'لا' => array('id' => 'no', 'value' => '0'),
+                        )),
+                        'مفعلة؟' => array('name' => '_OPEN_BOOL_NOINSERTactive', 'value' => $entity['_OPEN_BOOL_NOINSERTactive'], 'choices' => array(
+                            'نعم' => array('id' => 'yes', 'value' => '1'),
+                            'لا' => array('id' => 'no', 'value' => '0'),
+                        )),
+                        'التكلفة (بالدرهم)' => array('id' => 'cost', 'name' => '_OPEN_CURRENCYcost', 'value' => $entity['_OPEN_CURRENCYcost'])
+                    );
+                        try{
+                            $FORM -> updateForm($updateFormInfo, $updateFormMeta, 'P' . $rank_offset);
+                        }catch(Throwable $t){
+                            echo 'We have a problem with the update Form function. Check if you validate all of its conditions!';
+                        } ?>
+                    
+
+
+                <form action="" method="POST" class="operation">
+                    <button type="submit" name="archive" value="<?=$entity['_ID'] ?>">ارشفة</button>
+                </form>
+            </td></tr>
+        <?php endforeach; ?>
+        </table>
+
+        
+        <div class="pagination">
+            <ul class="pagination">
+                <?php
+
+                $total = $show -> count();
+                if($total - 10 * ($page - 1) - count($lines) > 0 && count($lines) > 10): 
+                
+                ?>
+                    <li><form method="GET"><button type="submit" name="page" value="<?=$page + 1?>" class="next">التالى</button></form></li>
+                    <li><p><?=$page?></p></li>
+                <?php endif; ?>
+
+                
+
+                <?php if($page > 1): ?>
+                    <li><form method="GET"><button type="submit" name="page" value="<?=$page - 1?>" class="previous">السابق</button></form></li>
+                <?php endif; ?>
+            </ul>
+        </div>
+        <?php endif; ?>

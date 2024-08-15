@@ -1,0 +1,291 @@
+/*This part is for the table for showing data*/
+*{
+    box-sizing: border-box;
+}
+table.entity{
+    width: 100%;
+    border-collapse: collapse;
+    box-sizing: border-box;
+}
+table.entity thead{
+    background: black;
+    height: 30px;
+    color: white;
+  }
+table.part{
+    width: 100%;
+    border-collapse: collapse;
+    box-sizing: border-box;
+	table-layout: fixed;
+}
+table.part thead{
+    background: black;
+    height: 30px;
+    color: white;
+  }
+th.entity{
+border: 1px solid;
+height: 100%;
+}
+td.entity{
+    border: 1px solid;
+    text-align: center;
+}
+th.part{
+border: 1px solid;
+height: 100%;
+}
+td.part{
+    border: 1px solid;
+    text-align: center;
+}
+/*Regulating the widths of columns*/
+th.rank, td.rank{
+	width: 3%;
+}
+th.entity:nth-child(2){
+	width: 16%;
+}
+th.entity:nth-child(3){
+	width: 12%;
+}
+th.entity:nth-child(4){
+	width: 4%;
+}
+th.entity:nth-child(5){
+	width: 10%;
+}
+th.entity:nth-child(6){
+	width: 10%;
+}
+th.entity:nth-child(7){
+	width: 8%;
+}
+th.entity:nth-child(8){
+	width: 12%;
+}
+th.entity:nth-child(9){
+	width: 25%;
+}
+th.part:nth-child(2){
+	width: 12%;
+}
+th.part:nth-child(3){
+	width: 12%;
+}
+th.part:nth-child(4){
+	width: 15%;
+}
+th.part:nth-child(5){
+	width: 8%;
+}
+th.part:nth-child(6){
+	width: 8%;
+}
+th.part:nth-child(7){
+	width: 8%;
+}
+th.part:nth-child(8){
+	width: 8%;
+}
+th.part:nth-child(9){
+	width: 8%;
+}
+th.part:nth-child(10){
+	width: 15%;
+}
+/*Regulating the heights of rows*/
+td.entity, td.part{
+	height: 72px;
+}
+/*Regulation overflow problem*/
+td.part:nth-child(4) div{
+	height: 69px;
+	white-space: wrap;
+	overflow: hidden;
+}
+/*Regularting the hover*/
+td.entity, td.part{
+	background-color: #AA5;
+}
+tr:hover td.entity, tr:hover td.part{
+	background-color: #008080;
+}
+/*Regulating the button dimensions*/
+.op{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 0;
+}
+.op button, .op form{
+	width: 100%;
+	font-weight: 800;
+	height: 24px;
+	box-sizing: border-box;
+	border: 0;
+}
+.op.archive button, .op.archive form{
+	width: 100%;
+	font-weight: 800;
+	height: 36px;
+	box-sizing: border-box;
+	border: 0;
+}
+.op form:first-child button{
+	background-color: #6B00FF;
+	color: #FFF;
+}
+.op form:first-child button:hover{
+	background-color: #6B66FF;
+	color: #FFF;
+}
+.op form:nth-child(2) button{
+	background-color: #4A6F00;
+	color: #FFF;
+}
+.op form:nth-child(2) button:hover{
+	background-color: #4A6F99;
+	color: #FFF;
+}
+.op.archive form:nth-child(2) button{
+	background-color: #900;
+	color: #FFF;
+}
+.op.archive form:nth-child(2) button:hover{
+	background-color: #906;
+	color: #FFF;
+}
+.op form:last-child button{
+	background-color: #900;
+	color: #FFF;
+}
+.op form:last-child button:hover{
+	background-color: #906;
+	color: #FFF;
+}
+/*Additional regulations for the journal page*/
+table.journal th:first-child{
+	width: 15%;
+}
+/*this part is for the alerts*/
+@keyframes disapear{
+    from{
+        opacity: 100%;
+    }
+    to{
+        opacity: 0;
+    }
+}
+h1.alert{
+    float: left;
+    padding-top: 30px;
+    
+    opacity: 1;
+    animation-name: disapear;
+    animation-delay: 1s;
+    animation-fill-mode: forwards;
+    animation-duration: .5s;
+    animation-timing-function:ease-in;
+}
+
+input#arrow{
+    display: none;
+}
+#arrow:checked + label img.arrow{
+    transform: rotateZ(90deg);
+}
+form.search{
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    float: right;
+    margin-top: 15px;
+}
+input.search{
+    height: 50px;
+    width: 200px;
+}
+
+div.pagination{
+    display: flex;
+    justify-content: center;
+    float:inline-end;
+    margin: 20px 400px 0 0;
+}
+ul.pagination{
+    width: 250px;
+    list-style: none;
+    float: right;
+}
+ul.pagination *{
+    float: right;
+    margin-left: 10px;
+}
+
+.modal{
+    padding: 6px;
+    background-color: rgba(255, 255, 255, .5);
+    border: 2px solid black;
+    border-radius: 1rem;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(50%, -50%) scale(0);
+    z-index: 10;
+    transition: transform 200ms ease-in;
+}
+.modal section{
+    display: none;
+}
+.modal.active{
+    transform: translate(-50%, -50%) scale(1);
+}
+
+#overlay{
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, .5);
+    pointer-events: none;
+    opacity: 0;
+}
+#overlay.active{
+    opacity: 1;
+    pointer-events: all;
+}
+#print{
+    position: absolute;
+    height: 90vh;
+    width: 600px;
+}
+.printable{
+    padding: 5px;
+
+}
+table.print img{
+    width: 100%;
+}
+
+table.show td.journal:last-child{
+    width: 800px;
+}
+
+#first-arrow, #second-arrow{
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    margin: 5px;
+}
+#first-arrow{
+    transform: rotateZ(180deg);
+	z-index: -1;
+}
+th.show:nth-child(10){
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
