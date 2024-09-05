@@ -2,7 +2,7 @@ Follow these steps to make the application work
 
 A - Configuring Xampp and localhost
 
--Install the latest version of Xampp. This application is devolopped with php 8.2. Some functionalities may not work with an oldest version.
+-Install the latest version of Xampp. This application is devolopped with php 8.2. Some functionalities may not work with an older version.
 -This application is made for Windows machines. It is not tested on any Linux distribution. This guide is just for Windows users. The difference is all about the directories paths.
 -Go to c:/xampp/apache/conf/httpd.conf or depending on your installation configuration. Edit the lines:
 DocumentRoot "C:/xampp/htdocs/app/public"
